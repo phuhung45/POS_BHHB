@@ -204,7 +204,7 @@ class Cart extends Component {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Scan Barcode..."
+                                    placeholder="Quét mã vạch"
                                     value={barcode}
                                     onChange={this.handleOnChangeBarcode}
                                 />
@@ -215,7 +215,7 @@ class Cart extends Component {
                                 className="form-control"
                                 onChange={this.setCustomerId}
                             >
-                                <option value="">Walking Customer</option>
+                                <option value="">Khách vãng lai</option>
                                 {customers.map(cus => (
                                     <option
                                         key={cus.id}
@@ -230,9 +230,9 @@ class Cart extends Component {
                             <table className="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Product Name</th>
-                                        <th>Quantity</th>
-                                        <th className="text-right">Price</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th className="text-right">Giá</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -276,7 +276,7 @@ class Cart extends Component {
                     </div>
 
                     <div className="row">
-                        <div className="col">Total:</div>
+                        <div className="col">Tổng:</div>
                         <div className="col text-right">
                             {window.APP.currency_symbol} {this.getTotal(cart)}
                         </div>
@@ -289,7 +289,7 @@ class Cart extends Component {
                                 onClick={this.handleEmptyCart}
                                 disabled={!cart.length}
                             >
-                                Cancel
+                                Xóa
                             </button>
                         </div>
                         <div className="col">
@@ -299,7 +299,7 @@ class Cart extends Component {
                                 disabled={!cart.length}
                                 onClick={this.handleClickSubmit}
                             >
-                                Submit
+                                Thanh toán
                             </button>
                         </div>
                     </div>
@@ -309,7 +309,7 @@ class Cart extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="Search Product..."
+                            placeholder="Tìm kiếm sản phẩm"
                             onChange={this.handleChangeSearch}
                             onKeyDown={this.handleSeach}
                         />

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductStoreRequest;
-use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -24,7 +22,7 @@ class ProductController extends Controller
         }
         $products = $products->latest()->paginate(10);
         if (request()->wantsJson()) {
-            return ProductResource::collection($products);
+            return Product::collection($products);
         }
         return view('products.index')->with('products', $products);
     }
@@ -45,8 +43,38 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductStoreRequest $request)
+    public function store(Request $request)
     {
+
+        $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'image' => 'nullable|image',
+                'barcode' => 'required|string|max:50|unique:products',
+                'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+                'quantity' => 'required|integer',
+                'status' => 'required|boolean',
+            ], 
+            [
+                'name.required' => 'Không được để trống tên sản phẩm',
+                'name.string' => 'Tên sản phẩm không đúng định dạng',
+                'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự',
+                'description.nullable' => 'Mô tả sản phẩm không được để trống',
+                'description.string' => 'Mô tả sản phẩm không đúng định dạng',
+                'image.nullable' => 'Không được để trống ảnh sản phẩm',
+                'image.image' => 'File tải lên phải là ảnh',
+                'barcode.required' => 'Không được để trống mã vạch',
+                'barcode.string' => 'Mã vạch không đúng định dạng',
+                'barcode.max' => 'Mã vạch không được vượt quá 50 ký tự',
+                'barcode.unique' => 'Mã vạch đã tồn tại',
+                'price.required' => 'Không được để trống giá sản phẩm',
+                'price.regex' => 'Giá sản phẩm không đúng định dạng',
+                'quantity.required' => 'Không được để trống số lượng',
+                'quantity.integer' => 'Số lượng sản phẩm phải là số nguyên'
+            ]
+          );
+
         $image_path = '';
 
         if ($request->hasFile('image')) {
@@ -63,10 +91,12 @@ class ProductController extends Controller
             'status' => $request->status
         ]);
 
-        if (!$product) {
-            return redirect()->back()->with('error', 'Sorry, there a problem while creating product.');
+        if ($product) {
+            $message = $request->validate;
+            return redirect($message)->route('products.index')->with('success', 'Thêm sản phẩm mới thành công.');
+        }else{
+            return redirect()->back()->with('error', 'Xảy ra lỗi khi thêm nhân viên.');
         }
-        return redirect()->route('products.index')->with('success', 'Success, you product have been created.');
     }
 
     /**
@@ -91,6 +121,13 @@ class ProductController extends Controller
         return view('products.edit')->with('product', $product);
     }
 
+    public function generateBarcode(Request $request){
+        $id = $request->get('id');
+        $product = Product::find($id);
+
+        return view('barcode')->with('product',$product);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -98,8 +135,36 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductUpdateRequest $request, Product $product)
+    public function update(Request $request, Product $product)
     {
+
+        $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'image' => 'nullable|image',
+                'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+                'quantity' => 'required|integer',
+                'status' => 'required|boolean',
+            ], 
+            [
+                'name.required' => 'Không được để trống tên sản phẩm',
+                'name.string' => 'Tên sản phẩm không đúng định dạng',
+                'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự',
+                'description.nullable' => 'Mô tả sản phẩm không được để trống',
+                'description.string' => 'Mô tả sản phẩm không đúng định dạng',
+                'image.nullable' => 'Không được để trống ảnh sản phẩm',
+                'image.image' => 'File tải lên phải là ảnh',
+                'barcode.string' => 'Mã vạch không đúng định dạng',
+                'barcode.max' => 'Mã vạch không được vượt quá 50 ký tự',
+                'barcode.unique' => 'Mã vạch đã tồn tại',
+                'price.required' => 'Không được để trống giá sản phẩm',
+                'price.regex' => 'Giá sản phẩm không đúng định dạng',
+                'quantity.required' => 'Không được để trống số lượng',
+                'quantity.integer' => 'Số lượng sản phẩm phải là số nguyên'
+            ]
+          );
+
         $product->name = $request->name;
         $product->description = $request->description;
         $product->barcode = $request->barcode;
@@ -118,10 +183,12 @@ class ProductController extends Controller
             $product->image = $image_path;
         }
 
-        if (!$product->save()) {
-            return redirect()->back()->with('error', 'Sorry, there\'re a problem while updating product.');
+        if ($product->save()) {
+            $message = $request->validate;
+            return redirect($message)->route('products.index')->with('success', 'Thêm sản phẩm mới thành công.');
+        }else{
+            return redirect()->back()->with('error', 'Xảy ra lỗi khi thêm sản phẩm.');
         }
-        return redirect()->route('products.index')->with('success', 'Success, your product have been updated.');
     }
 
     /**

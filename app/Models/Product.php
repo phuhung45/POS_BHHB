@@ -15,4 +15,5 @@ class Product extends Model
         'quantity',
         'status'
     ];
+
 }

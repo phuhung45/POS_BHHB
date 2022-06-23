@@ -31,7 +31,17 @@ class ProductStoreRequest extends FormRequest
             'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'quantity' => 'required|integer',
             'status' => 'required|boolean',
-
+        ];
+        [
+            'name.required' => 'Không được để trống tên sản phẩm',
+            'image.required' => 'Không được để trống ảnh sản phẩm',
+            'image.image' => 'File tải lên phải là ảnh',
+            'image.uploaded' => 'Ảnh tải lên không được quá 2MB',
+            'barcode.required' => 'Không được để trống mã vạch',
+            'barcode.unique' => 'Mã vạch đã tồn tại',
+            'price.required' => 'Không được để trống đơn giá',
+            'quantity.required' => 'Không được để trống số lượng',
+            'quantity.min' => 'Số lượng sản phẩm ít nhất là 1'
         ];
     }
 }

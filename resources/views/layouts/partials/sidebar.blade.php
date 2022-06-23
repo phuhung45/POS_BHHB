@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{route('home')}}" class="brand-link">
-        <img src="{{ asset('images/logo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+        <img src="{{ asset('images/logo.jpg') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
     </a>
@@ -25,46 +25,61 @@
                 <li class="nav-item has-treeview">
                     <a href="{{route('home')}}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Dashboard</p>
+                        <p>Bảng điều khiển</p>
                     </a>
                 </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="{{ route('reports.index') }}" class="nav-link {{ activeSegment('reports') }}">
+                        <i class="nav-icon fas fa-th-large"></i>
+                        <p>Báo cáo thu - chi</p>
+                    </a>
+                </li>
+
                 <li class="nav-item has-treeview">
                     <a href="{{ route('products.index') }}" class="nav-link {{ activeSegment('products') }}">
                         <i class="nav-icon fas fa-th-large"></i>
-                        <p>Products</p>
+                        <p>Danh sách sản phẩm</p>
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="{{ route('cart.index') }}" class="nav-link {{ activeSegment('cart') }}">
                         <i class="nav-icon fas fa-cart-plus"></i>
-                        <p>Open POS</p>
+                        <p>Giỏ hàng</p>
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="{{ route('orders.index') }}" class="nav-link {{ activeSegment('orders') }}">
                         <i class="nav-icon fas fa-cart-plus"></i>
-                        <p>Orders</p>
+                        <p>Danh sách Hóa Đơn</p>
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="{{ route('customers.index') }}" class="nav-link {{ activeSegment('customers') }}">
                         <i class="nav-icon fas fa-users"></i>
-                        <p>Customers</p>
+                        <p>Danh sách khách hàng</p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="{{ route('cashiers.index') }}" class="nav-link {{ activeSegment('cashiers') }}">
+                        <i class="nav-icon fas fa-desktop"></i>
+                        <p>Danh sách nhân viên</p>
                     </a>
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="{{ route('settings.index') }}" class="nav-link {{ activeSegment('settings') }}">
                         <i class="nav-icon fas fa-cogs"></i>
-                        <p>Settings</p>
+                        <p>Cài đặt</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="document.getElementById('logout-form').submit()">
+                    {{-- <a href="/logout" class="nav-link" onclick="document.getElementById('logout-form').submit()"> --}}
+                    <a href="{{route('logout.get')}}" class="nav-link">
                         <i class="nav-icon fas fa-sign-out-alt"></i>
-                        <p>Logout</p>
-                        <form action="{{route('logout')}}" method="POST" id="logout-form">
+                        <p>Thoát</p>
+                        {{-- <form action="{{route('logout')}}" method="POST" id="logout-form">
                             @csrf
-                        </form>
+                        </form> --}}
                     </a>
                 </li>
             </ul>

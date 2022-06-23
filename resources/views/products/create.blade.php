@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Create Product')
-@section('content-header', 'Create Product')
+@section('title', 'Thêm sản phẩm mới')
+@section('content-header', 'Thêm sản phẩm mới')
 
 @section('content')
 
@@ -12,9 +12,9 @@
             @csrf
 
             <div class="form-group">
-                <label for="name">Name</label>
+                <label for="name">Tên sản phẩm</label>
                 <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name"
-                    placeholder="Name" value="{{ old('name') }}">
+                    placeholder="Nhập tên sản phẩm" value="{{ old('name') }}">
                 @error('name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -24,9 +24,9 @@
 
 
             <div class="form-group">
-                <label for="description">Description</label>
+                <label for="description">Mô tả</label>
                 <textarea name="description" class="form-control @error('description') is-invalid @enderror"
-                    id="description" placeholder="description">{{ old('description') }}</textarea>
+                    id="description" placeholder="Mô tả chi tiết sản phẩm">{{ old('description') }}</textarea>
                 @error('description')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -35,10 +35,10 @@
             </div>
 
             <div class="form-group">
-                <label for="image">Image</label>
+                <label for="image">Hình ảnh</label>
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" name="image" id="image">
-                    <label class="custom-file-label" for="image">Choose file</label>
+                    <label class="custom-file-label" for="image">Tải lên hình ảnh sản phẩm</label>
                 </div>
                 @error('image')
                 <span class="invalid-feedback" role="alert">
@@ -48,9 +48,9 @@
             </div>
 
             <div class="form-group">
-                <label for="barcode">Barcode</label>
+                <label for="barcode">Mã vạch</label>
                 <input type="text" name="barcode" class="form-control @error('barcode') is-invalid @enderror"
-                    id="barcode" placeholder="barcode" value="{{ old('barcode') }}">
+                    id="barcode" placeholder="Mã vạch của sản phẩm" value="{{ old('barcode') }}">
                 @error('barcode')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -59,9 +59,9 @@
             </div>
 
             <div class="form-group">
-                <label for="price">Price</label>
-                <input type="text" name="price" class="form-control @error('price') is-invalid @enderror" id="price"
-                    placeholder="price" value="{{ old('price') }}">
+                <label for="price">Đơn giá</label>
+                <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" id="price"
+                    placeholder="Đơn giá sản phẩm" value="{{ old('price') }}">
                 @error('price')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -70,9 +70,9 @@
             </div>
 
             <div class="form-group">
-                <label for="quantity">Quantity</label>
-                <input type="text" name="quantity" class="form-control @error('quantity') is-invalid @enderror"
-                    id="quantity" placeholder="Quantity" value="{{ old('quantity', 1) }}">
+                <label for="quantity">Số lượng</label>
+                <input type="number" name="quantity" class="form-control @error('quantity') is-invalid @enderror"
+                    id="quantity" placeholder="Số lượng sản phẩm" value="{{ old('quantity', 1) }}">
                 @error('quantity')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -93,7 +93,8 @@
                 @enderror
             </div>
 
-            <button class="btn btn-primary" type="submit">Create</button>
+            <button class="btn btn-primary" type="submit">Thêm sản phẩm</button>
+            <a href="{{ route('products.index') }}"><button class="btn btn-danger btn-close" type="button">Hủy</button></a>
         </form>
     </div>
 </div>

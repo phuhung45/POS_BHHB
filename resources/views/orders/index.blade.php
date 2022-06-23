@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
-@section('title', 'Orders List')
-@section('content-header', 'Order List')
+@section('title', 'Danh sách hóa đơn')
+@section('content-header', 'Danh sách hóa đơn')
 @section('content-actions')
-    <a href="{{route('cart.index')}}" class="btn btn-primary">Open POS</a>
+    <a href="{{route('cart.index')}}" class="btn btn-primary">Giỏ hàng</a>
 @endsection
 
 @section('content')
@@ -31,12 +31,12 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Customer Name</th>
-                    <th>Total</th>
-                    <th>Received Amount</th>
-                    <th>Status</th>
-                    <th>To Pay</th>
-                    <th>Created At</th>
+                    <th>Tên khách hàng</th>
+                    <th>Tổng</th>
+                    <th>Thanh toán</th>
+                    <th>Trạng thái</th>
+                    <th>Trả lại</th>
+                    <th>Ngày tạo</th>
                 </tr>
             </thead>
             <tbody>

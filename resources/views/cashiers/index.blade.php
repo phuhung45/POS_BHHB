@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
-@section('title', 'Danh sách khách hàng')
-@section('content-header', 'Danh sách khách hàng')
+@section('title', 'Danh sách nhân viên')
+@section('content-header', 'Danh sách nhân viên')
 @section('content-actions')
-    <a href="{{route('customers.create')}}" class="btn btn-primary">Thêm khách hàng mới</a>
+    <a href="{{route('cashiers.create')}}" class="btn btn-primary">Thêm nhân viên</a>
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }}">
@@ -15,40 +15,41 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Avatar</th>
                     <th>Họ</th>
                     <th>Tên</th>
                     <th>Email</th>
                     <th>Số điện thoại</th>
-                    <th>Địa chỉ</th>
                     <th>Ngày tạo</th>
+                    <th>Ngày cập nhật</th>
+                    <th>Vai trò</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($customers as $customer)
+                @foreach ($cashiers as $cashier)
                     <tr>
-                        <td>{{$customer->id}}</td>
+                        <td>{{$cashier->id}}</td>
+
+                        <td>{{$cashier->first_name}}</td>
+                        <td>{{$cashier->last_name}}</td>
+                        <td>{{$cashier->email}}</td>
+                        <td>{{$cashier->phone}}</td>
+                        <td>{{$cashier->created_at}}</td>
+                        <td>{{$cashier->updated_at}}</td>
                         <td>
-                            <img width="50" src="{{$customer->getAvatarUrl()}}" alt="">
+                            <span class="right badge badge-{{ $cashier->is_admin == 1 ? 'success' : 'danger' }}">{{$cashier->is_admin == 1 ? 'Admin' : 'Nhân viên'}}</span>
                         </td>
-                        <td>{{$customer->first_name}}</td>
-                        <td>{{$customer->last_name}}</td>
-                        <td>{{$customer->email}}</td>
-                        <td>{{$customer->phone}}</td>
-                        <td>{{$customer->address}}</td>
-                        <td>{{$customer->created_at}}</td>
                         <td>
-                            <a href="{{ route('customers.edit', $customer) }}" class="btn btn-primary"><i
+                            <a href="{{ route('cashiers.edit', $cashier) }}" class="btn btn-primary"><i
                                     class="fas fa-edit"></i></a>
-                            <button class="btn btn-danger btn-delete" data-url="{{route('customers.destroy', $customer)}}"><i
+                            <button class="btn btn-danger btn-delete" data-url="{{route('cashiers.destroy', $cashier)}}"><i
                                     class="fas fa-trash"></i></button>
                         </td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
-            {{ $customers->render() }}
+            {{ $cashiers->render() }}
         </div>
     </div>
 @endsection
@@ -68,11 +69,11 @@
                 })
 
                 swalWithBootstrapButtons.fire({
-                    title: 'Bạn có chắc chắn xóa?',
-                    text: "Bạn có chắc muốn xóa khách hàng này?",
+                    title: 'Bạn có chắc chắn?',
+                    text: "Bạn có chắc chắn muốn xóa nhân viên này?",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Có, tôi chắc chắn',
+                    confirmButtonText: 'Có, tôi chắc chắn!',
                     cancelButtonText: 'Không',
                     reverseButtons: true
                 }).then((result) => {

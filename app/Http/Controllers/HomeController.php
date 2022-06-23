@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -44,5 +45,15 @@ class HomeController extends Controller
             })->sum(),
             'customers_count' => $customers_count
         ]);
+    }
+
+    public function logout()
+    {
+        $checkLogout = Auth::logout();
+        if (!$checkLogout) {
+            return redirect()->back()->with('error', 'Sorry, there\'re a problem while creating customer.');
+        } else {
+        return redirect()->route('login')->with('success', 'Đăng xuất thành công.');
+    }
     }
 }

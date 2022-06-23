@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<p class="login-box-msg">Sign in to start your session</p>
+<p class="login-box-msg">Đăng nhập để bắt đầu phiên làm việc</p>
 
 <form action="{{ route('login') }}" method="post">
     @csrf
@@ -18,7 +18,7 @@
 
         <div class="input-group">
             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                placeholder="Email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                placeholder="Email đăng nhập của bạn" value="{{ old('email') }}" required autocomplete="email" autofocus>
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-envelope"></span>
@@ -34,7 +34,7 @@
     <div class="form-group">
 
         <div class="input-group">
-            <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password"
+            <input type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Mật khẩu đăng nhập"
                 name="password" required autocomplete="current-password">
             <div class="input-group-append">
                 <div class="input-group-text">
@@ -53,7 +53,7 @@
             <div class="icheck-primary">
                 <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                 <label for="remember">
-                    Remember Me
+                    Nhớ mật khẩu
                 </label>
             </div>
         </div>
@@ -66,9 +66,10 @@
 </form>
 
 <p class="mb-1">
-    <a href="{{ route('password.request') }}">I forgot my password</a>
+    <a href="{{ route('password.request') }}">Quên mật khẩu</a>
 </p>
-<p class="mb-0">
+{{-- <p class="mb-0">
     <a href="{{ route('register')}}" class="text-center">Register a new membership</a>
-</p>
+</p> --}}
+
 @endsection
