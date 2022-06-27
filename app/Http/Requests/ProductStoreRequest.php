@@ -34,14 +34,20 @@ class ProductStoreRequest extends FormRequest
         ];
         [
             'name.required' => 'Không được để trống tên sản phẩm',
-            'image.required' => 'Không được để trống ảnh sản phẩm',
+            'name.string' => 'Tên sản phẩm không đúng định dạng',
+            'name.max' => 'Tên sản phẩm không được vượt quá 255 ký tự',
+            'description.nullable' => 'Mô tả sản phẩm không được để trống',
+            'description.string' => 'Mô tả sản phẩm không đúng định dạng',
+            'image.nullable' => 'Không được để trống ảnh sản phẩm',
             'image.image' => 'File tải lên phải là ảnh',
-            'image.uploaded' => 'Ảnh tải lên không được quá 2MB',
             'barcode.required' => 'Không được để trống mã vạch',
+            'barcode.string' => 'Mã vạch không đúng định dạng',
+            'barcode.max' => 'Mã vạch không được vượt quá 50 ký tự',
             'barcode.unique' => 'Mã vạch đã tồn tại',
-            'price.required' => 'Không được để trống đơn giá',
+            'price.required' => 'Không được để trống giá sản phẩm',
+            'price.regex' => 'Giá sản phẩm không đúng định dạng',
             'quantity.required' => 'Không được để trống số lượng',
-            'quantity.min' => 'Số lượng sản phẩm ít nhất là 1'
+            'quantity.integer' => 'Số lượng sản phẩm phải là số nguyên'
         ];
     }
 }

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Http\Requests\ProductStoreRequest;
+use App\Models\Report;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -15,15 +18,37 @@ class ReportsController extends Controller
      */
     public function index(Request $request)
     {
-        $reports = new Product();
-        if ($request->search) {
-            $reports = $reports->where('name', 'LIKE', "%{$request->search}%");
+        $colected = new OrderItem();
+        $colected = OrderItem::all();
+        $colected = OrderItem::sum('price');
+        $total = Report::where('status', 1)->sum(DB::raw('price*quantity'));
+        // dd($total);
+        $end = $request->end_date;
+        // dd($end);
+        $start = $request->start_date;
+        // dd($start);
+        $reports = new Report();
+        //
+        if($request->start_date) {
+            $total = Report::where('status', 1)->where('created_at', '>=', $start)->sum(DB::raw('price*quantity'));
+            $reports = Report::where('created_at', '>=', $start);
         }
+        else if($request->end_date) {
+            $total  = Report::where('status', 1)->where('created_at', '<=', $end)->sum(DB::raw('price*quantity'));
+            $reports = Report::where('created_at', '<=', $end . ' 23:59:59');
+        }
+        // if($request->end_date && $request->start_date) {
+        //     $total = Product::where('status', 1)->where('created_at', '<=', $end && 'created_at', '>=', $start)->sum(DB::raw('price*quantity'));
+        //     $reports = Product::where('created_at', '>=', $start && 'created_at', '<=', $end . ' 23:59:59');
+        // }
+        // if ($request->search) {
+        //     $reports = $reports->where('name', 'LIKE', "%{$request->search}%");
+        // }
         $reports = $reports->latest()->paginate(10);
         if (request()->wantsJson()) {
-            return Product::collection($reports);
+            return response(Report::collection($reports));
         }
-        return view('reports.index')->with('reports', $reports);
+        return view('reports.index', ['total' => $total], ['colected' => $colected])->with('reports', $reports);
     }
 
     /**
@@ -42,7 +67,7 @@ class ReportsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
         $report_price = $request->price;
         $report_quantity = $request->quantity;
@@ -53,10 +78,10 @@ class ReportsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Report $report)
     {
         //
     }
@@ -64,43 +89,62 @@ class ReportsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Report $report)
     {
-        //
+        return view('reports.edit')->with('report', $report);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $request->name = $request->name;
+        $request->description = $request->description;
+        $request->barcode = $request->barcode;
+        $request->price = $request->price;
+        $request->quantity = $request->quantity;
+        $request->status = $request->status;
+
+        if ($request->hasFile('image')) {
+            // Delete old image
+            if ($request->image) {
+                Storage::delete($request->image);
+            }
+            // Store image
+            $image_path = $request->file('image')->store('requests', 'public');
+            // Save to Database
+            $request->image = $image_path;
+        }
+
+        if (!$request->save()) {
+            return redirect()->back()->with('error', 'Sorry, there\'re a problem while updating product.');
+        }
+        return redirect()->route('products.index')->with('success', 'Success, your product have been updated.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
-    }
-    public function total(Request $request)
-    {
-        $report_price = $request->price;
-        $report_quantity = $request->quantity;
-        $total = $report_price * $report_quantity;
-        return $this->items->map(function ($total){
-            return $total->price;
-        })->sum();
+        if ($request->image) {
+            Storage::delete($request->image);
+        }
+        $request->delete();
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

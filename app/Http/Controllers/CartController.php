@@ -9,6 +9,7 @@ class CartController extends Controller
 {
     public function index(Request $request)
     {
+        // dd($request->user()->cart());
         if ($request->wantsJson()) {
             return response(
                 $request->user()->cart()->get()
@@ -56,7 +57,6 @@ class CartController extends Controller
         ]);
 
         $cart = $request->user()->cart()->where('id', $request->product_id)->first();
-
         if ($cart) {
             $cart->pivot->quantity = $request->quantity;
             $cart->pivot->save();
