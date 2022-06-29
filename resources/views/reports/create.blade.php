@@ -8,7 +8,7 @@
 <div class="card">
     <div class="card-body">
 
-        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('reports.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group">
@@ -94,7 +94,7 @@
             </div>
 
             <button class="btn btn-primary" type="submit">Thêm sản phẩm</button>
-            <a href="{{ route('products.index') }}"><button class="btn btn-danger btn-close" type="button">Hủy</button></a>
+            <a href="{{ route('reports.index') }}"><button class="btn btn-danger btn-close" type="button">Hủy</button></a>
         </form>
     </div>
 </div>

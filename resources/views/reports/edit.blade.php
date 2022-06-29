@@ -8,14 +8,14 @@
 <div class="card">
     <div class="card-body">
 
-        <form action="{{ route('reports.update', $product) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('reports.update', $report) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
             <div class="form-group">
                 <label for="name">Tên sản phẩm</label>
                 <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name"
-                    placeholder="Tên sản phẩm" value="{{ old('name', $product->name) }}">
+                    placeholder="Tên sản phẩm" value="{{ old('name', $report->name) }}">
                 @error('name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -28,7 +28,7 @@
                 <label for="description">Mô tả</label>
                 <textarea name="description" class="form-control @error('description') is-invalid @enderror"
                     id="description"
-                    placeholder="Mô tả chi tiết về sản phẩm">{{ old('description', $product->description) }}</textarea>
+                    placeholder="Mô tả chi tiết về sản phẩm">{{ old('description', $report->description) }}</textarea>
                 @error('description')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -52,7 +52,7 @@
             <div class="form-group">
                 <label for="barcode">Mã vạch</label>
                 <input type="text" name="barcode" class="form-control @error('barcode') is-invalid @enderror"
-                    id="barcode" placeholder="Mã vạch của sản phẩm" value="{{ old('barcode', $product->barcode) }}">
+                    id="barcode" placeholder="Mã vạch của sản phẩm" value="{{ old('barcode', $report->barcode) }}">
                 @error('barcode')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>

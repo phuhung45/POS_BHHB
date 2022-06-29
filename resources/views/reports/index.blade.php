@@ -11,6 +11,24 @@
 @section('content')
 <div class="card product-list">
     <div class="card-body">
+    <div class="row">
+            <div class="col-md-7"></div>
+            <div class="col-md-5">
+                <form action="{{route('reports.index')}}">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="date" name="start_date" class="form-control" value="{{request('start_date')}}" />
+                        </div>
+                        <div class="col-md-5">
+                            <input type="date" name="end_date" class="form-control" value="{{request('end_date')}}" />
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-outline-primary" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -19,8 +37,8 @@
                     <th>Hình ảnh</th>
                     <th>Đơn giá</th>
                     <th>Số lượng</th>
-                    <th>Trạng thái</th>
                     <th>Thành tiền</th>
+                    <th>Trạng thái</th>
                     <th>Ngày tạo</th>
                     <th>Actions</th>
                 </tr>
@@ -30,14 +48,15 @@
                 <tr>
                     <td>{{$report->id}}</td>
                     <td>{{$report->name}}</td>
-                    <td>{{$report->price}}</td>
-                    <td>{{$report->quantity}}</td>
+                    <td><img class="report-img" style="" src="{{ Storage::url($report->image) }}" alt="" width="70px" height="70px"></td>
+                    <td>{{number_format($report->price)}}</td>
+                    <td>{{number_format($report->quantity)}}</td>
+                    <td>{{number_format($report->price * $report->quantity)}}</td>
                     <td>
                         <span
-                            class="right badge badge-{{ $product->status ? 'success' : 'danger' }}">{{$product->status ? 'Active' : 'Inactive'}}</span>
+                            class="right badge badge-{{ $report->status ? 'success' : 'danger' }}">{{$report->status ? 'Active' : 'Inactive'}}</span>
                     </td>
-                    <td>{{$product->created_at}}</td>
-                    {{-- <td>{{$total ?? : '0'}}</td> --}}
+                    <td>{{$report->created_at}}</td>
                     <td>
                         <a href="{{ route('reports.edit', $report) }}" class="btn btn-primary"><i
                                 class="fas fa-edit"></i></a>
@@ -46,7 +65,47 @@
                     </td>
                 </tr>
                 @endforeach
+                <tr>
+                    <th>Tiền nhập hàng</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>{{ config('settings.currency_symbol') }} {{ number_format($total) }}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
             </tbody>
+            <thead>
+            <tr>
+                    <th>Tiền bán hàng</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>{{ config('settings.currency_symbol') }} {{ number_format($colected) }}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                    <th>Tiền lãi</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>{{ config('settings.currency_symbol') }} {{ number_format($colected - $total) }}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
         </table>
         {{ $reports->render() }}
     </div>

@@ -47,8 +47,11 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
+        // $report_price = $request->price;
+        // $report_quantity = $request->quantity;
+        // $report_total = $report_price * $report_quantity;
+        // return $report_total;
         $image_path = '';
-
         if ($request->hasFile('image')) {
             $image_path = $request->file('image')->store('products', 'public');
         }
