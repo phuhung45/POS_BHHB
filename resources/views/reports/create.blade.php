@@ -48,17 +48,6 @@
             </div>
 
             <div class="form-group">
-                <label for="barcode">Mã vạch</label>
-                <input type="text" name="barcode" class="form-control @error('barcode') is-invalid @enderror"
-                    id="barcode" placeholder="Mã vạch của sản phẩm" value="{{ old('barcode') }}">
-                @error('barcode')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
-            </div>
-
-            <div class="form-group">
                 <label for="price">Đơn giá</label>
                 <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" id="price"
                     placeholder="Đơn giá sản phẩm" value="{{ old('price') }}">

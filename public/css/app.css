@@ -16967,3 +16967,8 @@ a.text-dark:focus {
   max-height: 70px;
 }
 
+.report-list .report-img {
+  max-width: 70px;
+  max-height: 70px;
+}
+

@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Report;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
-class ReportsController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,43 +21,46 @@ class ReportsController extends Controller
         $colected = OrderItem::all()->sum(DB::raw('price'));
         $total = Report::where('status', 1)->sum(DB::raw('price*quantity'));
         // dd($total);
-        $end = $request->end_date;
-        // dd($end);
-        $start = $request->start_date;
-        // dd($start);
+        $start = Carbon::parse($request->start_date);
+        $end = Carbon::parse($request->end_date);
         $reports = new Report();
-        $reports = Report::all()->get();
-        
-        
+        $reports = Report::all();
+
         if($request->end_date && empty($request->start_date)) {
+            dump(1);
+            $reports = Report::where('created_at', '<=', date('Y-m-d'));
+            // dd($reports);
             $total  = Report::where('status', 1)->where('created_at', '<=', $end)->sum(DB::raw('price*quantity'));
-            $colected = OrderItem::where('created_at', '<=', $end . ' 23:59:59')->sum(DB::raw('price'));
-            $reports = Report::where('created_at', '<=', $end . ' 23:59:59');
+            dd($total);
+            $colected = OrderItem::where('created_at', '>=', $end . ' 23:59:59')->sum(DB::raw('price'));
         }
         elseif($request->start_date && empty($request->end_date)) {
+            dump(2);
+            $reports = Report::where('created_at', '>=', $start)->get();
+            // dd($reports);
             $total = Report::where('status', 1)->where('created_at', '>=', $start)->sum(DB::raw('price*quantity'));
             $colected = OrderItem::where('created_at', '>=', $start)->sum(DB::raw('price'));
-            $reports = Report::where('created_at', '>=', $start);
         }
         elseif($request->start_date && $request->end_date) {
+            dump(3);
+            $reports = Report::whereBetween('created_at', [$start, $end])->get();
+            dd($reports);
             $total  = Report::where('created_at', '>=', $start)->where('created_at', '<=', $end . ' 23:59:59')->sum(DB::raw('price*quantity'));
             $colected = OrderItem::where('created_at', '>=', $start)->where('created_at', '<=', $end . ' 23:59:59')->sum(DB::raw('price'));
-            $reports = Report::where('created_at', '>=', $start)->where('created_at', '<=', $end . ' 23:59:59')->get('id');
-        } 
-
-        $reports = new Report();
+        }
+// dd($reports);
         if ($request->search) {
             $reports = $reports->where('name', 'LIKE', "%{$request->search}%");
         }
-        
-        // $reports = $reports->with('Report')->latest()->paginate(10);
-        $reports = Report::where('status', 1)->latest()->paginate(10);
+
+        $reports = Report::where('status', 1)->where('created_at', '<=', $end . ' 23:59:59')->latest()->paginate(10);
         if (request()->wantsJson()) {
             return response(Report::collection($reports));
         }
 
 
-        return view('reports.index', ['total' => $total], ['colected' => $colected])->with('reports', $reports);
+        // return view('reports.index', ['total' => $total], ['colected' => $colected])->with('reports', $reports);
+        return view('reports.index', compact('total', 'colected', 'reports'));
     }
 
     /**
@@ -87,7 +91,6 @@ class ReportsController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'image' => $image_path,
-            'barcode' => $request->barcode,
             'price' => $request->price,
             'quantity' => $request->quantity,
             'status' => $request->status
@@ -132,7 +135,6 @@ class ReportsController extends Controller
     {
         $request->name = $request->name;
         $request->description = $request->description;
-        $request->barcode = $request->barcode;
         $request->price = $request->price;
         $request->quantity = $request->quantity;
         $request->status = $request->status;

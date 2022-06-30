@@ -12,7 +12,6 @@ class Report extends Model
         'name',
         'description',
         'image',
-        'barcode',
         'price',
         'quantity',
         'status'
