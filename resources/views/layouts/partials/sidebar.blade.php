@@ -37,6 +37,13 @@
                 </li>
 
                 <li class="nav-item has-treeview">
+                    <a href="{{ route('receipts.index') }}" class="nav-link {{ activeSegment('receipts') }}">
+                        <i class="nav-icon fas fa-th-large"></i>
+                        <p>Hóa đơn - hình ảnh</p>
+                    </a>
+                </li>
+
+                <li class="nav-item has-treeview">
                     <a href="{{ route('products.index') }}" class="nav-link {{ activeSegment('products') }}">
                         <i class="nav-icon fas fa-th-large"></i>
                         <p>Danh sách sản phẩm</p>

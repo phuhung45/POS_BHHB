@@ -28,6 +28,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('orders', OrderController::class);
     Route::resource('cashiers', CashierController::class);
     Route::resource('reports', ReportController::class);
+    Route::resource('receipts', ReceiptController::class);
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');

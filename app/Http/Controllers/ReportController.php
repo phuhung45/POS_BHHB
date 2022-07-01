@@ -16,44 +16,84 @@ class ReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+//     public function indexBackup(Request $request)
+//     {
+//         $colected = OrderItem::all()->sum(DB::raw('price'));
+//         $total = Report::where('status', 1)->sum(DB::raw('price*quantity'));
+//         // dd($total);
+//         $start = Carbon::parse($request->start_date)->format('Y-m-d') . ' 00:00:00';
+//         $end = Carbon::parse($request->end_date)->format('Y-m-d') . ' 23:59:59';
+//         // $reports = new Report();
+//         $reports = Report::all();
+
+//         //empty start_date and empty end_date
+//         if($request->end_date && empty($request->start_date)) {
+//             // dump(1);
+//             $reports = Report::where('created_at', '<=', date('Y-m-d'));
+//             // dd($reports);
+//             $total  = Report::where('status', 1)->where('created_at', '<=', $end)->sum(DB::raw('price*quantity'));
+//             // dd($total);
+//             $colected = OrderItem::where('created_at', '<=', $end)->sum(DB::raw('price'));
+//         }
+//         elseif($request->start_date && empty($request->end_date)) {
+//             // dump(2);
+//             // dump($start);
+//             $reports = Report::where('created_at', '>=', date('Y-m-d'));
+//             // dd($reports);
+//             $total = Report::where('status', 1)->where('created_at', '>=', $start)->sum(DB::raw('price*quantity'));
+//             $colected = OrderItem::where('created_at', '>=', $start)->sum(DB::raw('price'));
+//         }
+//         elseif($request->start_date && $request->end_date) {
+//             // dump(3);
+//             $reports = Report::whereBetween('created_at', [$start, $end])->get();
+//             // dd($reports);
+//             $total  = Report::where('created_at', '>=', $start)->where('created_at', '<=', $end . ' 23:59:59')->sum(DB::raw('price*quantity'));
+//             $colected = OrderItem::where('created_at', '>=', $start)->where('created_at', '<=', $end . ' 23:59:59')->sum(DB::raw('price'));
+//         }
+// // dd($reports);
+//         if ($request->search) {
+//             $reports = $reports->where('name', 'LIKE', "%{$request->search}%");
+//         }
+
+//         $reports = Report::where('status', 1)->where('created_at', '<=', $end . ' 23:59:59')->latest()->paginate(10);
+//         if (request()->wantsJson()) {
+//             return response(Report::collection($reports));
+//         }
+
+
+//         // return view('reports.index', ['total' => $total], ['colected' => $colected])->with('reports', $reports);
+//         return view('reports.index', compact('total', 'colected', 'reports'));
+//     }
+
     public function index(Request $request)
     {
         $colected = OrderItem::all()->sum(DB::raw('price'));
-        $total = Report::where('status', 1)->sum(DB::raw('price*quantity'));
-        // dd($total);
-        $start = Carbon::parse($request->start_date);
-        $end = Carbon::parse($request->end_date);
-        $reports = new Report();
-        $reports = Report::all();
 
-        if($request->end_date && empty($request->start_date)) {
-            dump(1);
-            $reports = Report::where('created_at', '<=', date('Y-m-d'));
-            // dd($reports);
-            $total  = Report::where('status', 1)->where('created_at', '<=', $end)->sum(DB::raw('price*quantity'));
-            dd($total);
-            $colected = OrderItem::where('created_at', '>=', $end . ' 23:59:59')->sum(DB::raw('price'));
-        }
-        elseif($request->start_date && empty($request->end_date)) {
-            dump(2);
-            $reports = Report::where('created_at', '>=', $start)->get();
-            // dd($reports);
-            $total = Report::where('status', 1)->where('created_at', '>=', $start)->sum(DB::raw('price*quantity'));
-            $colected = OrderItem::where('created_at', '>=', $start)->sum(DB::raw('price'));
-        }
-        elseif($request->start_date && $request->end_date) {
-            dump(3);
-            $reports = Report::whereBetween('created_at', [$start, $end])->get();
-            dd($reports);
-            $total  = Report::where('created_at', '>=', $start)->where('created_at', '<=', $end . ' 23:59:59')->sum(DB::raw('price*quantity'));
-            $colected = OrderItem::where('created_at', '>=', $start)->where('created_at', '<=', $end . ' 23:59:59')->sum(DB::raw('price'));
-        }
-// dd($reports);
-        if ($request->search) {
-            $reports = $reports->where('name', 'LIKE', "%{$request->search}%");
+        $reports = Report::select(['*', DB::raw('price * quantity as total_price')]);
+        $reports->where(['status' => 1]);
+
+        if (!empty($request->start_date)) {
+            $startDate = Carbon::parse($request->start_date)->format('Y-m-d') . ' 00:00:00';
+            $reports->where('created_at', '>=', $startDate);
+            $colected = OrderItem::where('created_at', '>=', $startDate)->sum(DB::raw('price'));
         }
 
-        $reports = Report::where('status', 1)->where('created_at', '<=', $end . ' 23:59:59')->latest()->paginate(10);
+        if (!empty($request->end_date)) {
+            $endDate = Carbon::parse($request->end_date)->format('Y-m-d') . ' 23:59:59';
+            $reports->where('created_at', '<=', $endDate);
+            $colected = OrderItem::where('created_at', '<=', $endDate)->sum(DB::raw('price'));
+        }
+
+        //total
+
+        //colected
+        if (!empty($request->search)) {
+            $reports->where('name', 'LIKE', "%{$request->search}%");
+        }
+
+        $reports = $reports->latest()->paginate(10);
+        $total = $reports->getCollection()->sum('total_price');
+
         if (request()->wantsJson()) {
             return response(Report::collection($reports));
         }
