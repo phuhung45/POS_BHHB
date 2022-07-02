@@ -85,7 +85,7 @@
             </div>
 
             <button class="btn btn-primary" type="submit">Cập nhật</button>
-            <a href="{{ route('products.index') }}"><button class="btn btn-danger btn-close" type="button">Hủy</button></a>
+            <a href="{{ route('reports.index') }}"><button class="btn btn-danger btn-close" type="button">Hủy</button></a>
         </form>
     </div>
 </div>

@@ -8,14 +8,14 @@
 <div class="card">
     <div class="card-body">
 
-        <form action="{{ route('reports.update', $report) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('receipts.update', $receipt) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
             <div class="form-group">
-                <label for="name">Tên sản phẩm</label>
+                <label for="name">Tên nhân viên</label>
                 <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name"
-                    placeholder="Tên sản phẩm" value="{{ old('name', $report->name) }}">
+                    placeholder="Tên sản phẩm" value="{{ old('name', $receipt->name) }}">
                 @error('name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -23,24 +23,11 @@
                 @enderror
             </div>
 
-
             <div class="form-group">
-                <label for="description">Mô tả</label>
-                <textarea name="description" class="form-control @error('description') is-invalid @enderror"
-                    id="description"
-                    placeholder="Mô tả chi tiết về sản phẩm">{{ old('description', $report->description) }}</textarea>
-                @error('description')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="image">Hình ảnh</label>
+                <label for="image">Hình ảnh hóa đơn</label>
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" name="image" id="image">
-                    <label class="custom-file-label" for="image">Tải lên hình ảnh sản phẩm</label>
+                    <label class="custom-file-label" for="image">Tải lên hình ảnh hóa đơn</label>
                 </div>
                 @error('image')
                 <span class="invalid-feedback" role="alert">
@@ -49,43 +36,9 @@
                 @enderror
             </div>
 
-            <div class="form-group">
-                <label for="price">Giá</label>
-                <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" id="price"
-                    placeholder="Đơn giá sản phẩm" value="{{ old('price', $product->price) }}">
-                @error('price')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="quantity">Số lượng</label>
-                <input type="number" name="quantity" class="form-control @error('quantity') is-invalid @enderror"
-                    id="quantity" placeholder="Số lượng sản phẩm" value="{{ old('quantity', $product->quantity) }}">
-                @error('quantity')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
-            </div>
-
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select name="status" class="form-control @error('status') is-invalid @enderror" id="status">
-                    <option value="1" {{ old('status', $product->status) === 1 ? 'selected' : ''}}>Active</option>
-                    <option value="0" {{ old('status', $product->status) === 0 ? 'selected' : ''}}>Inactive</option>
-                </select>
-                @error('status')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
-            </div>
 
             <button class="btn btn-primary" type="submit">Cập nhật</button>
-            <a href="{{ route('products.index') }}"><button class="btn btn-danger btn-close" type="button">Hủy</button></a>
+            <a href="{{ route('receipts.index') }}"><button class="btn btn-danger btn-close" type="button">Hủy</button></a>
         </form>
     </div>
 </div>
