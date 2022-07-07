@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
-@section('title', 'Danh sách sản phẩm')
-@section('content-header', 'Danh sách sản phẩm')
+@section('title', 'Danh sách hóa đơn')
+@section('content-header', 'Danh sách hóa đơn')
 @section('content-actions')
-<a href="{{route('reports.create')}}" class="btn btn-primary">Thêm sản phẩm mới</a>
+<a href="{{route('receipts.create')}}" class="btn btn-primary">Thêm hóa đơn mới</a>
 @endsection
 @section('css')
 <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }}">
@@ -14,7 +14,7 @@
     <div class="row">
             <div class="col-md-7"></div>
             <div class="col-md-5">
-                <form action="{{route('reports.index')}}">
+                <form action="{{route('receipts.index')}}">
                     <div class="row">
                         <div class="col-md-5">
                             <input type="date" name="start_date" class="form-control" value="{{request('start_date')}}" />
@@ -33,81 +33,48 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Tên sản phẩm</th>
                     <th>Hình ảnh</th>
-                    <th>Đơn giá</th>
-                    <th>Số lượng</th>
-                    <th>Thành tiền</th>
+                    <th>Giá</th>
+                    <th>Người thanh toán</th>
                     <th>Trạng thái</th>
                     <th>Ngày tạo</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($reports as $report)
+                @foreach ($receipts as $receipt)
                 <tr>
-                    <td>{{$report->id}}</td>
-                    <td>{{$report->name}}</td>
-                    <td><img class="report-img" style="" src="{{ Storage::url($report->image) }}" alt="" width="70px" height="70px"></td>
-                    <td>{{number_format($report->price)}}</td>
-                    <td>{{number_format($report->quantity)}}</td>
-                    <td>{{number_format($report->price * $report->quantity)}}</td>
+                    <td>{{$receipt->id}}</td>
+                    <td>{{$receipt->name}}</td>
+                    <td><img class="receipt-img" style="" src="{{ Storage::url($receipt->image) }}" alt="" width="70px" height="70px"></td>
+                    <td>{{number_format($receipt->price)}}</td>
                     <td>
                         <span
-                            class="right badge badge-{{ $report->status ? 'success' : 'danger' }}">{{$report->status ? 'Active' : 'Inactive'}}</span>
+                            class="right badge badge-{{ $receipt->status ? 'success' : 'danger' }}">{{$receipt->status ? 'Active' : 'Inactive'}}</span>
                     </td>
-                    <td>{{$report->created_at}}</td>
+                    <td>{{$receipt->created_at}}</td>
                     <td>
-                        <a href="{{ route('reports.edit', $report) }}" class="btn btn-primary"><i
+                        <a href="{{ route('receipts.edit', $receipt) }}" class="btn btn-primary"><i
                                 class="fas fa-edit"></i></a>
-                        <button class="btn btn-danger btn-delete" data-url="{{route('reports.destroy', $report)}}"><i
+                        <button class="btn btn-danger btn-delete" data-url="{{route('receipts.destroy', $receipt)}}"><i
                                 class="fas fa-trash"></i></button>
                     </td>
                 </tr>
                 @endforeach
                 <tr>
-                    <th>Tiền nhập hàng</th>
+                    <th>Tiền bán hàng</th>
                     <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th>{{ config('settings.currency_symbol') }} {{ number_format($total) }}</th>
                     <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
                 </tr>
             </tbody>
-            <thead>
-            <tr>
-                    <th>Tiền bán hàng</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>{{ config('settings.currency_symbol') }} {{ number_format($colected) }}</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tfoot>
-            <tr>
-                    <th>Tiền lãi</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>{{ config('settings.currency_symbol') }} {{ number_format($colected - $total) }}</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </tfoot>
         </table>
-        {{ $reports->render() }}
+        {{ $receipts->render() }}
     </div>
 </div>
 @endsection

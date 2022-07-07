@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Thêm sản phẩm mới')
-@section('content-header', 'Thêm sản phẩm mới')
+@section('title', 'Thêm sản hóa đơn')
+@section('content-header', 'Thêm sản hóa đơn')
 
 @section('content')
 
@@ -10,18 +10,15 @@
 
         <form action="{{ route('receipts.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
+            
             <div class="form-group">
-                <label for="name">Tên nhân viên</label>
-                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name"
-                    placeholder="Nhập tên sản phẩm" value="{{ old('name') }}">
-                @error('name')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
+                <label for="name">Người thanh toán</label>
+                <select name="cashier" class="form-control @error('cashier') is-invalid @enderror" id="cashier">
+                    @foreach ($users as $user)
+                    <option value="name">{{$user->email}}</option>
+                    @endforeach
+                </select>
             </div>
-
 
             <div class="form-group">
                 <label for="image">Hình ảnh</label>
@@ -36,8 +33,32 @@
                 @enderror
             </div>
 
+            <div class="form-group">
+                <label for="price">Giá</label>
+                <input type="text" name="price" class="form-control @error('price') is-invalid @enderror" id="price"
+                    placeholder="Nhập tên sản phẩm" value="{{ old('price') }}">
+                @error('price')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select name="status" class="form-control @error('status') is-invalid @enderror" id="status">
+                    <option value="1" {{ old('status') === 1 ? 'selected' : ''}}>Active</option>
+                    <option value="0" {{ old('status') === 0 ? 'selected' : ''}}>Inactive</option>
+                </select>
+                @error('status')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+
             <button class="btn btn-primary" type="submit">Tải lên hóa đơn</button>
-            <a href="{{ route('reports.index') }}"><button class="btn btn-danger btn-close" type="button">Hủy</button></a>
+            <a href="{{ route('receipts.index') }}"><button class="btn btn-danger btn-close" type="button">Hủy</button></a>
         </form>
     </div>
 </div>

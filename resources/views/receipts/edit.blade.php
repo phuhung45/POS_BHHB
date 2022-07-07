@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Cập nhật sản phẩm')
-@section('content-header', 'Cập nhật sản phẩm')
+@section('title', 'Chi tiết hóa đơn')
+@section('content-header', 'Chi tiết hóa đơn')
 
 @section('content')
 
@@ -12,33 +12,14 @@
             @csrf
             @method('PUT')
 
-            <div class="form-group">
-                <label for="name">Tên nhân viên</label>
-                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name"
-                    placeholder="Tên sản phẩm" value="{{ old('name', $receipt->name) }}">
-                @error('name')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
-            </div>
+            @foreach ($receipts as $receipt)
+                <tr>
+                    <td><img class="receipt-img" style="" src="{{ Storage::url($receipt->image) }}" alt="" width="400px" height="700px"></td>
+                </tr>
+                @endforeach
 
-            <div class="form-group">
-                <label for="image">Hình ảnh hóa đơn</label>
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" name="image" id="image">
-                    <label class="custom-file-label" for="image">Tải lên hình ảnh hóa đơn</label>
-                </div>
-                @error('image')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
-            </div>
-
-
-            <button class="btn btn-primary" type="submit">Cập nhật</button>
-            <a href="{{ route('receipts.index') }}"><button class="btn btn-danger btn-close" type="button">Hủy</button></a>
+            <!-- <button class="btn btn-primary" type="submit">Cập nhật</button> -->
+            <a href="{{ route('receipts.index') }}"><button class="btn btn-danger btn-close" type="button">Đóng</button></a>
         </form>
     </div>
 </div>

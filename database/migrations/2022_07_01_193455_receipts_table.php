@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
-            $table->string('cashier_name');
+            $table->integer('price');
+            $table->boolean('status')->default(true);
             $table->string('image');
             $table->timestamps();
         });
