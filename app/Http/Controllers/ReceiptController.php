@@ -69,21 +69,21 @@ class ReceiptController extends Controller
     {
         $users = User::all();
         // dd($users);
-        $receipts = Receipt::select(DB::raw('price'));
+        $receipts = Receipt::select(['*', DB::raw('price')]);
         $receipts->where(['status' => 1]);
         // dd($receipts);
-        // $colected = Receipt::where('status', 1)->sum(DB::raw('price'));
+         $colected = Receipt::where('status', 1)->sum(DB::raw('price'));
 
         if (!empty($request->start_date)) {
             $startDate = Carbon::parse($request->start_date)->format('Y-m-d') . ' 00:00:00';
             $receipts->where('created_at', '>=', $startDate);
-            // $colected = Receipt::where('created_at', '>=', $startDate)->sum(DB::raw('price'));
+             $colected = Receipt::where('created_at', '>=', $startDate)->sum(DB::raw('price'));
         }
 
         if (!empty($request->end_date)) {
             $endDate = Carbon::parse($request->end_date)->format('Y-m-d') . ' 23:59:59';
             $receipts->where('created_at', '<=', $endDate);
-            // $colected = Receipt::where('created_at', '<=', $endDate)->sum(DB::raw('price'));
+             $colected = Receipt::where('created_at', '<=', $endDate)->sum(DB::raw('price'));
         }
 
         //total
@@ -100,7 +100,7 @@ class ReceiptController extends Controller
             return response(Receipt::collection($receipts));
         }
 
-        return view('receipts.index', compact('receipts', 'users'));
+        return view('receipts.index', compact('receipts', 'users', 'colected'));
     }
 
     /**
@@ -161,7 +161,7 @@ class ReceiptController extends Controller
      */
     public function edit(Receipt $receipt)
     {
-        return view('receipts.edit')->with('receipt', $receipt);
+        return view('receipts.edit')->with(['receipt' => $receipt]);
     }
 
     /**

@@ -67,7 +67,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th></th>
+                    <th>{{ config('settings.currency_symbol') }} {{ number_format($colected) }}</th>
                     <th></th>
                     <th></th>
                     <th></th>

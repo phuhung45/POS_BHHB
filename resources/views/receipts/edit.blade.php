@@ -8,15 +8,14 @@
 <div class="card">
     <div class="card-body">
 
-        <form action="{{ route('receipts.update', $receipt) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('receipts.update', 'id') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
-            @foreach ($receipts as $receipt)
                 <tr>
                     <td><img class="receipt-img" style="" src="{{ Storage::url($receipt->image) }}" alt="" width="400px" height="700px"></td>
                 </tr>
-                @endforeach
+
 
             <!-- <button class="btn btn-primary" type="submit">Cập nhật</button> -->
             <a href="{{ route('receipts.index') }}"><button class="btn btn-danger btn-close" type="button">Đóng</button></a>
